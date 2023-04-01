@@ -5,7 +5,7 @@ import { Database } from 'types/supabase';
 import { createClient, PostgrestError } from '@supabase/supabase-js'
 
 const supabaseUrl = 'https://wmjcmreneslbznzsvzhg.supabase.co'
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndtamNtcmVuZXNsYnpuenN2emhnIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NzkyNDkyOTksImV4cCI6MTk5NDgyNTI5OX0.oCAUuePg7CJRlDPVNhyyhWCvF61cWHrJmwWZWjFGI6o'
+const supabaseKey = process.env.SUPABASE_KEY as string
 const supabase = createClient<Database>(supabaseUrl, supabaseKey)
 
 type Data = {
