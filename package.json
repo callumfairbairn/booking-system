@@ -1,14 +1,16 @@
 {
-  "name": "booking-system-2",
+  "name": "booking-system",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "update-types": "npx supabase gen types typescript --project-id \"wmjcmreneslbznzsvzhg\" > types/supabase.ts"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.13.1",
     "@types/node": "18.15.11",
     "@types/react": "18.0.31",
     "@types/react-dom": "18.0.11",
@@ -18,5 +20,8 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "typescript": "5.0.3"
+  },
+  "devDependencies": {
+    "supabase": "^1.46.5"
   }
 }
