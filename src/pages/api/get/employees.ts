@@ -2,13 +2,13 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { prisma } from '@/util/prisma'
 
-import { employees } from '@prisma/client';
+import { employee } from '@prisma/client';
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<employees | Error>
+  res: NextApiResponse<employee | Error>
 ) {
-  const employees = await prisma.employees.findFirst()
+  const employees = await prisma.employee.findFirst()
   if (employees) {
     return res.status(200).json(employees)
   }

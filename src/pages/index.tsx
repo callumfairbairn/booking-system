@@ -2,11 +2,11 @@ import Head from 'next/head'
 import styles from '@/styles/Home.module.css'
 import useSWR from 'swr'
 import fetcher from '@/util/fetcher'
-import { employees } from '@prisma/client'
+import { employee } from '@prisma/client'
 
 
 export default function Home() {
-  const { data: employee } = useSWR<employees>('/api/employee', fetcher)
+  const { data: employee } = useSWR<employee>('/api/employee', fetcher)
 
   return (
     <>
@@ -26,3 +26,4 @@ export default function Home() {
     </>
   )
 }
+ 
