@@ -6,7 +6,7 @@ import { employees } from '@prisma/client'
 
 
 export default function Home() {
-  const { data: employee } = useSWR<employees>('/api/hello', fetcher)
+  const { data: employee } = useSWR<employees>('/api/employee', fetcher)
 
   return (
     <>
