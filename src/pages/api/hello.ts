@@ -1,24 +1,16 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from 'next'
-import { Database } from 'types/supabase';
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { prisma } from '@/util/prisma'
 
-import { createClient, PostgrestError } from '@supabase/supabase-js'
-
-const supabaseUrl = 'https://wmjcmreneslbznzsvzhg.supabase.co'
-const supabaseKey = process.env.SUPABASE_KEY as string
-const supabase = createClient<Database>(supabaseUrl, supabaseKey)
-
-type Data = {
-  name: string
-}
+import { employees } from '@prisma/client';
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data | PostgrestError>
+  res: NextApiResponse<employees | Error>
 ) {
-  const { data, error } = await supabase.from('EMPLOYEES').select('name')
-  if (error) {
-    return res.status(500).json(error)
+  const employees = await prisma.employees.findFirst()
+  if (employees) {
+    return res.status(200).json(employees)
   }
-  res.status(200).json({ name: `${data[0].name}` })
+  return res.status(500).json(Error('Employee not found'))
 }

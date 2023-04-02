@@ -1,11 +1,12 @@
 import Head from 'next/head'
 import styles from '@/styles/Home.module.css'
 import useSWR from 'swr'
-import fetcher from '@/fetcher'
+import fetcher from '@/util/fetcher'
+import { employees } from '@prisma/client'
 
 
 export default function Home() {
-  const { data } = useSWR<{ name: string }>('/api/hello', fetcher)
+  const { data: employee } = useSWR<employees>('/api/hello', fetcher)
 
   return (
     <>
@@ -16,8 +17,10 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        <div className={styles.center}>
-          {data?.name}
+        <div style={{ flexDirection: 'column' }}>
+          {employee ? Object.entries(employee).map(([key, value]) => (
+            <div style={{ textAlign: 'start' }} key={key}>{`${key}: ${value}`}</div>
+          )) : null}
         </div>
       </main>
     </>
