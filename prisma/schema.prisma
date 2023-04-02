@@ -13,4 +13,15 @@ model employee {
   email        String
   name         String
   phone_number String
+  booked_slots booked_slot[]
+}
+
+model booked_slot {
+  id           Int      @id @default(autoincrement())
+  created_at   DateTime @default(now()) @db.Timestamptz(6)
+  start_time   DateTime @db.Timestamptz(6)
+  end_time     DateTime @db.Timestamptz(6)
+  user_email   String
+  employee     employee @relation(fields: [employee_id], references: [id])
+  employee_id  Int
 }
