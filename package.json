@@ -10,7 +10,11 @@
     "db-pull": "npx prisma db pull",
     "db-create-client": "npx prisma db push",
     "update-prisma-client": "npm run db-pull && npm run db-create-client",
+    "db-seed": "npx prisma db seed",
     "test": "jest"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
   },
   "dependencies": {
     "@prisma/client": "^4.12.0",
@@ -21,6 +25,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "swr": "^2.1.2",
+    "ts-node": "^10.9.1",
     "typescript": "5.0.3"
   },
   "devDependencies": {
