@@ -23,5 +23,5 @@ model booked_slot {
   end_time     DateTime @db.Timestamptz(6)
   user_email   String
   employee     employee @relation(fields: [employee_id], references: [id])
-  employee_id  Int
+  employee_id  Int[]
 }
