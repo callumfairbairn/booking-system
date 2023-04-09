@@ -19,6 +19,7 @@ model employee {
 model booked_slot {
   id           Int      @id @default(autoincrement())
   created_at   DateTime @default(now()) @db.Timestamptz(6)
+  date         DateTime @db.Date
   from         DateTime @db.Timestamptz(6)
   to           DateTime @db.Timestamptz(6)
   user_email   String

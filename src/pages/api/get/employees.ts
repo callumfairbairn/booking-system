@@ -1,14 +1,14 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from 'next';
+import type { NextApiRequest, NextApiResponse } from 'next/types';
 import { prisma } from '@/util/prisma'
 
 import { employee } from '@prisma/client';
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<employee | Error>
+  res: NextApiResponse<employee[] | Error>
 ) {
-  const employees = await prisma.employee.findFirst()
+  const employees = await prisma.employee.findMany()
   if (employees) {
     return res.status(200).json(employees)
   }

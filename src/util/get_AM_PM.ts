@@ -1,6 +1,6 @@
 import { Slot } from "@/types/slot";
 
-interface AM_PM {
+export interface AM_PM {
   AM: boolean,
   PM: boolean,
 }

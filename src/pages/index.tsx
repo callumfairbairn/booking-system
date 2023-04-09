@@ -6,7 +6,8 @@ import { employee } from '@prisma/client'
 
 
 export default function Home() {
-  const { data: employee } = useSWR<employee>('/api/get/employees', fetcher)
+  const { data: employees } = useSWR<employee[]>('/api/get/employees', fetcher)
+  const { data: AM_PM } = useSWR<string>('/api/get/AM_PM?date=2023-04-08', fetcher)
 
   return (
     <>
@@ -18,7 +19,12 @@ export default function Home() {
       </Head>
       <main className={styles.main}>
         <div className='flex-col bg-teal-100'>
-          {employee ? Object.entries(employee).map(([key, value]) => (
+          {employees ? employees.map((employee) => (
+            <div style={{ textAlign: 'start' }} key={employee.id}>{`${employee.id}: ${employee.name}`}</div>
+          )) : null}
+        </div>
+        <div className='flex-col bg-orange-300'>
+          {AM_PM ? Object.entries(AM_PM).map(([key, value]) => (
             <div style={{ textAlign: 'start' }} key={key}>{`${key}: ${value}`}</div>
           )) : null}
         </div>
