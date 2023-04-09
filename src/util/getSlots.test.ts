@@ -57,8 +57,8 @@ describe('getSlots', () => {
       const bookedSlots: booked_slot[] = [
         {
           id: 1,
-          start_time: new Date('2023-01-01:09:00:00'),
-          end_time: new Date('2023-01-01:12:00:00'),
+          from: new Date('2023-01-01:09:00:00'),
+          to: new Date('2023-01-01:12:00:00'),
           employee_id: 1,
           created_at: new Date('2022-12-25'),
           user_email: 'leeroy.jenkins@gmail.com',
@@ -89,8 +89,8 @@ describe('getSlots', () => {
       const bookedSlots: booked_slot[] = [
         {
           id: 1,
-          start_time: new Date('2023-01-01:08:00:00'),
-          end_time: new Date('2023-01-01:20:00:00'),
+          from: new Date('2023-01-01:08:00:00'),
+          to: new Date('2023-01-01:20:00:00'),
           employee_id: 1,
           created_at: new Date('2022-12-25'),
           user_email: 'leeroy.jenkins@gmail.com',

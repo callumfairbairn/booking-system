@@ -16,8 +16,7 @@ interface GetSlotsArgs {
 export const getSlots = ({ date, bookedSlots, employees, slotLength, workingHours }: GetSlotsArgs): Slot[] => {
   const employeeIsAvailable = (employee: employee, slot: Slot) => {
     const employeeBookedSlots = bookedSlots.filter(bookedSlot => bookedSlot.employee_id === employee.id)
-    // refator booked_slot to have from and to
-    return !employeeBookedSlots.some(bookedSlot => slotsOverlaps(slot, { from: bookedSlot.start_time, to: bookedSlot.end_time }))
+    return !employeeBookedSlots.some(bookedSlot => slotsOverlaps(slot, bookedSlot))
   }
 
   const atLeastOneEmployeeIsAvailable = (slot: Slot) => employees.some(employee => {
