@@ -12,11 +12,17 @@ interface GetSlotsArgs {
 
 // Return slots (start datetime +  end datetime) for a given date
 // Slots are an hour apart of a given length
-// Don't return slots which overlap with booked slots
+// Don't return slots which have no available employees
 export const getSlots = ({ date, bookedSlots, employees, slotLength, workingHours }: GetSlotsArgs): Slot[] => {
-  const slotOverlapsWithBooked = (slot: Slot, bookedSlots: booked_slot[]) =>
-    // refactor booked_slot type to have from and to
-    bookedSlots.some(bookedSlot => slotsOverlaps(slot, { from: bookedSlot.start_time, to: bookedSlot.end_time }))
+  const employeeIsAvailable = (employee: employee, slot: Slot) => {
+    const employeeBookedSlots = bookedSlots.filter(bookedSlot => bookedSlot.employee_id === employee.id)
+    // refator booked_slot to have from and to
+    return !employeeBookedSlots.some(bookedSlot => slotsOverlaps(slot, { from: bookedSlot.start_time, to: bookedSlot.end_time }))
+  }
+
+  const atLeastOneEmployeeIsAvailable = (slot: Slot) => employees.some(employee => {
+    return employeeIsAvailable(employee, slot)
+  })
 
   const slots: Slot[] = []
 
@@ -25,7 +31,7 @@ export const getSlots = ({ date, bookedSlots, employees, slotLength, workingHour
     const nextTo = addHours(nextFrom, slotLength)
     const nextSlot: Slot = { from: nextFrom, to: nextTo }
 
-    if (nextFrom.getHours() < nextTo.getHours() && !slotOverlapsWithBooked(nextSlot, bookedSlots)) {
+    if (nextFrom.getHours() < nextTo.getHours() && atLeastOneEmployeeIsAvailable(nextSlot)) {
       slots.push(nextSlot)
     }
   }
