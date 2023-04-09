@@ -29,13 +29,54 @@ describe('getSlots', () => {
         }
       ]
       const slotLength = 3
-      const workingHours = { from: 8, to: 16 }
+      const workingHours = { from: 8, to: 23 }
   
       const expectedSlots: Slot[] = [
         { from: new Date('2023-01-01:08:00:00'), to: new Date('2023-01-01:11:00:00') },
         { from: new Date('2023-01-01:09:00:00'), to: new Date('2023-01-01:12:00:00') },
         { from: new Date('2023-01-01:10:00:00'), to: new Date('2023-01-01:13:00:00') },
         { from: new Date('2023-01-01:11:00:00'), to: new Date('2023-01-01:14:00:00') },
+        { from: new Date('2023-01-01:12:00:00'), to: new Date('2023-01-01:15:00:00') },
+        { from: new Date('2023-01-01:13:00:00'), to: new Date('2023-01-01:16:00:00') },
+        { from: new Date('2023-01-01:14:00:00'), to: new Date('2023-01-01:17:00:00') },
+        { from: new Date('2023-01-01:15:00:00'), to: new Date('2023-01-01:18:00:00') },
+        { from: new Date('2023-01-01:16:00:00'), to: new Date('2023-01-01:19:00:00') },
+        { from: new Date('2023-01-01:17:00:00'), to: new Date('2023-01-01:20:00:00') },
+        { from: new Date('2023-01-01:18:00:00'), to: new Date('2023-01-01:21:00:00') },
+        { from: new Date('2023-01-01:19:00:00'), to: new Date('2023-01-01:22:00:00') },
+        { from: new Date('2023-01-01:20:00:00'), to: new Date('2023-01-01:23:00:00') },
+      ]
+  
+      expect(getSlots({ date, bookedSlots, employees, slotLength, workingHours })).toEqual(expectedSlots)
+    })
+  })
+
+  describe('when there are booked slots', () => {
+    it('does not return slots wich overlap with booked slots', () => {
+      const date = new Date('2023-01-01')
+      const bookedSlots: booked_slot[] = [
+        {
+          id: 1,
+          start_time: new Date('2023-01-01:09:00:00'),
+          end_time: new Date('2023-01-01:12:00:00'),
+          employee_id: 1,
+          created_at: new Date('2022-12-25'),
+          user_email: 'leeroy.jenkins@gmail.com',
+        }
+      ]
+      const employees: employee[] = [
+        {
+          id: 1,
+          email: 'bob.dole@cleaning.com',
+          name: 'Bob Dole',
+          created_at: new Date('2022-12-25'),
+          phone_number: '123456789',
+        }
+      ]
+      const slotLength = 3
+      const workingHours = { from: 8, to: 16 }
+  
+      const expectedSlots: Slot[] = [
         { from: new Date('2023-01-01:12:00:00'), to: new Date('2023-01-01:15:00:00') },
         { from: new Date('2023-01-01:13:00:00'), to: new Date('2023-01-01:16:00:00') },
       ]
