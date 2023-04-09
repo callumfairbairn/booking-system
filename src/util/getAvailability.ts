@@ -1,11 +1,11 @@
 import { Slot } from "@/types/slot";
 
-export interface AM_PM {
+export interface Availability {
   AM: boolean,
   PM: boolean,
 }
 
-export const get_AM_PM = (slots: Slot[]): AM_PM => {
+export const getAvailability = (slots: Slot[]): Availability => {
   const AM = slots.some(slot => slot.from.getHours() < 12)
   const PM = slots.some(slot => slot.from.getHours() >= 12)
 

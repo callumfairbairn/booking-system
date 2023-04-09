@@ -3,11 +3,34 @@ import styles from '@/styles/Home.module.css'
 import useSWR from 'swr'
 import fetcher from '@/util/fetcher'
 import { employee } from '@prisma/client'
+import Datepicker from "tailwind-datepicker-react"
+import { useState } from 'react'
+import { Button } from 'flowbite-react'
+import { Availability } from '@/util/getAvailability'
+
+const datepickerOptions = {
+  minDate: new Date(),
+}
+
+// convert date object to YYYY-MM-DD
+const formatDate = (date: Date | null) => {
+  if (!date) return null
+  const year = date.getFullYear()
+  const month = date.getMonth() + 1
+  const day = date.getDate()
+  return `${year}-${month}-${day}`
+}
 
 
 export default function Home() {
-  const { data: employees } = useSWR<employee[]>('/api/get/employees', fetcher)
-  const { data: AM_PM } = useSWR<string>('/api/get/AM_PM?date=2023-04-08', fetcher)
+  const [showDatepicker, setShowDatepicker] = useState(false)
+  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date())
+  const [availability, setAvailability] = useState<Availability | null>(null)
+  const handleDateChange = (date: Date | null) => setSelectedDate(date)
+  const handleShowDatepicker = async () => {
+    const result = await fetcher(`/api/get/availability?date=${formatDate(selectedDate)}`)
+    setAvailability(result)
+  }
 
   return (
     <>
@@ -17,19 +40,23 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={styles.main}>
-        <div className='flex-col bg-teal-100'>
-          {employees ? employees.map((employee) => (
-            <div style={{ textAlign: 'start' }} key={employee.id}>{`${employee.id}: ${employee.name}`}</div>
-          )) : null}
-        </div>
-        <div className='flex-col bg-orange-300'>
-          {AM_PM ? Object.entries(AM_PM).map(([key, value]) => (
-            <div style={{ textAlign: 'start' }} key={key}>{`${key}: ${value}`}</div>
-          )) : null}
+      <main className={'bg-slate-300 flex flex-col p-3 min-h-screen min-x-screen justify-center items-center'}>
+        <div className='flex flex-col max-w-4xl w-full items-center gap-4'>
+          <div className='flex flex-col gap-1 content-center justify-center max-w-sm'>
+            <Datepicker
+              options={datepickerOptions}
+              show={showDatepicker}
+              setShow={setShowDatepicker}
+              onChange={handleDateChange}
+            />
+            <Button onClick={handleShowDatepicker}>Show availability</Button>
+          </div>
+          <div className={`flex gap-1 ${availability ? 'visible' : 'invisible'}`}>
+            <Button pill disabled={!availability?.AM}>AM</Button>
+            <Button pill disabled={!availability?.PM}>PM</Button>
+          </div>
         </div>
       </main>
     </>
   )
 }
- 
