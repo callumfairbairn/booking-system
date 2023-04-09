@@ -77,6 +77,11 @@ describe('getSlots', () => {
       const workingHours = { from: 8, to: 16 }
   
       const expectedSlots: Slot[] = [
+        /* These slots are not returned because they overlap with the booked slot */
+        // { from: new Date('2023-01-01:08:00:00'), to: new Date('2023-01-01:11:00:00') },
+        // { from: new Date('2023-01-01:09:00:00'), to: new Date('2023-01-01:12:00:00') },
+        // { from: new Date('2023-01-01:10:00:00'), to: new Date('2023-01-01:13:00:00') },
+        // { from: new Date('2023-01-01:11:00:00'), to: new Date('2023-01-01:14:00:00') },
         { from: new Date('2023-01-01:12:00:00'), to: new Date('2023-01-01:15:00:00') },
         { from: new Date('2023-01-01:13:00:00'), to: new Date('2023-01-01:16:00:00') },
       ]
