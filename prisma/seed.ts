@@ -1,31 +1,42 @@
-import { bobDole, jimboJonesSlot, markCook } from "./seedData";
+// import { bobDole, bumblebeeGuySlot, hankScorpioSlot, jimboJonesSlot, markCook, troyMcClureSlot } from "./seedData"
 
+const seedData = require("./seedData");
 const { PrismaClient } = require('@prisma/client')
 //@ts-ignore
 const prisma = new PrismaClient()
 
+const employees = [
+  seedData.bobDole,
+  seedData.markCook,
+]
+
 const createEmployees = async () => {
-  const employee1 = await prisma.employee.upsert({
-    where: { id: 1 },
-    create: bobDole,
-    update: bobDole,
+  employees.forEach(async (thisEmployee, index) => {
+    const employee = await prisma.employee.upsert({
+      where: { id: index + 1 },
+      create: thisEmployee,
+      update: thisEmployee,
+    })
+    console.log('Created: ', employee);
   })
-  console.log('Created: ', employee1);
-  const employee2 = await prisma.employee.upsert({
-    where: { id: 2 },
-    create: markCook,
-    update: markCook,
-  })
-  console.log('Created: ', employee2);
 }
 
+const bookedSlots = [
+  seedData.jimboJonesSlot,
+  seedData.troyMcClureSlot,
+  seedData.bumblebeeGuySlot,
+  seedData.hankScorpioSlot,
+]
+
 const createBookedSlots = async () => {
-  const bookedSlot1 = await prisma.booked_slot.upsert({
-    where: { id: 1 },
-    create: jimboJonesSlot,
-    update: jimboJonesSlot,
+  bookedSlots.forEach(async (thisSlot, index) => {
+    const bookedSlot = await prisma.booked_slot.upsert({
+      where: { id: index + 1 },
+      create: thisSlot,
+      update: thisSlot,
+    })
+    console.log('Created: ', bookedSlot);
   })
-  console.log('Created: ', bookedSlot1);
 }
 
 async function main() {

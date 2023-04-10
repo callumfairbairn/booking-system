@@ -15,17 +15,18 @@ export default async function handler(
   if (!date) {
     return res.status(400).json(Error('Date is required'))
   }
+  const dateAsDateObject = new Date(date as string)
 
   const bookedSlots = await prisma.booked_slot.findMany({
     where: {
-      date: new Date(date as string),
+      date: dateAsDateObject,
     },
   })
   const employees = await prisma.employee.findMany()
 
   if (bookedSlots) {
     const slots = getSlots({ 
-      date: new Date(date as string),
+      date: dateAsDateObject,
       bookedSlots,
       employees,
       slotLength: SLOT_LENGTH,
