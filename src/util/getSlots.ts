@@ -1,4 +1,4 @@
-import { Slot, WorkingHours } from "@/types/slot.d"
+import { FromAndTo, Slot, WorkingHours } from "@/types"
 import { booked_slot, employee } from "@prisma/client"
 import { addHours, slotsOverlaps } from "./slots"
 
@@ -14,24 +14,23 @@ interface GetSlotsArgs {
 // Slots are an hour apart of a given length
 // Don't return slots which have no available employees
 export const getSlots = ({ date, bookedSlots, employees, slotLength, workingHours }: GetSlotsArgs): Slot[] => {
-  const employeeIsAvailable = (employee: employee, slot: Slot) => {
+  const employeeIsAvailable = (employee: employee, slot: FromAndTo) => {
     const employeeBookedSlots = bookedSlots.filter(bookedSlot => bookedSlot.employee_id === employee.id)
     return !employeeBookedSlots.some(bookedSlot => slotsOverlaps(slot, bookedSlot))
   }
 
-  const atLeastOneEmployeeIsAvailable = (slot: Slot) => employees.some(employee => {
-    return employeeIsAvailable(employee, slot)
-  })
+  const getAvailableEmployee = (slot: FromAndTo) =>
+    employees.find(employee => employeeIsAvailable(employee, slot))
 
   const slots: Slot[] = []
 
   for (let nextFromHour = workingHours.from; nextFromHour + slotLength <= workingHours.to; nextFromHour++) {
     const nextFrom = addHours(date, nextFromHour)
     const nextTo = addHours(nextFrom, slotLength)
-    const nextSlot: Slot = { from: nextFrom, to: nextTo }
+    const employee = getAvailableEmployee({ from: nextFrom, to: nextTo })
 
-    if (nextFrom.getHours() < nextTo.getHours() && atLeastOneEmployeeIsAvailable(nextSlot)) {
-      slots.push(nextSlot)
+    if (nextFrom.getHours() < nextTo.getHours() && employee) {
+      slots.push({ from: nextFrom, to: nextTo, employee_id: employee.id })
     }
   }
   return slots
