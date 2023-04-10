@@ -57,6 +57,7 @@ describe('getSlots', () => {
       const bookedSlots: booked_slot[] = [
         {
           id: 1,
+          date: new Date('2023-01-01'),
           from: new Date('2023-01-01:09:00:00'),
           to: new Date('2023-01-01:12:00:00'),
           employee_id: 1,
@@ -94,6 +95,7 @@ describe('getSlots', () => {
       const bookedSlots: booked_slot[] = [
         {
           id: 1,
+          date: new Date('2023-01-01'),
           from: new Date('2023-01-01:08:00:00'),
           to: new Date('2023-01-01:20:00:00'),
           employee_id: 1,
