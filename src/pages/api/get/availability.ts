@@ -2,9 +2,7 @@ import { Availability, getAvailability } from "@/util/getAvailability";
 import { getSlots } from "@/util/getSlots";
 import { NextApiRequest, NextApiResponse } from "next/types";
 import { prisma } from "@/util/prisma";
-
-const SLOT_LENGTH = 3;
-const WORKING_HOURS = { from: 9, to: 17 };
+import { slotLength, workingHours } from "@/util/environmentVars";
 
 export default async function handler(
   req: NextApiRequest,
@@ -34,10 +32,10 @@ export default async function handler(
       date: dateAsDateObject,
       bookedSlots,
       employees,
-      slotLength: SLOT_LENGTH,
-      workingHours: WORKING_HOURS 
+      slotLength,
+      workingHours,
     })
-    return res.status(200).json(getAvailability(slots))
+    return res.status(200).json(getAvailability(slots, workingHours))
   }
   return res.status(500).json(Error('Booked slots not found'))
 }
