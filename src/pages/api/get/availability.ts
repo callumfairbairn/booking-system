@@ -35,7 +35,7 @@ export default async function handler(
       slotLength,
       workingHours,
     })
-    return res.status(200).json(getAvailability(slots, workingHours))
+    return res.status(200).json(getAvailability(slots))
   }
   return res.status(500).json(Error('Booked slots not found'))
 }
