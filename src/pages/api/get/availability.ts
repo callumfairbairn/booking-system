@@ -10,6 +10,11 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Availability | Error>
 ) {
+  if (req.method !== 'GET') {
+    res.status(405).send(Error('Only POST requests allowed'))
+    return
+  }
+
   const { date } =  req.query;
 
   if (!date) {

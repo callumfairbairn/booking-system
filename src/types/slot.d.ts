@@ -1,14 +1,14 @@
-import { booked_slot } from "@prisma/client"
+import { booked_slot, employee } from "@prisma/client"
 
-export interface Slot extends Partial<booked_slot> {
-    from: Date
-    to: Date
-    employee_id: number
+export interface Slot {
+    from: booked_slot["from"]
+    to: booked_slot["to"]
+    employee: employee
 }
 
-export interface FromAndTo extends Partial<booked_slot> {
-    from: Date
-    to: Date
+export interface FromAndTo {
+    from: booked_slot["from"]
+    to: booked_slot["to"]
 }
 
 // Should make gap between from and two a multiple of slotLength for optimal number of slots

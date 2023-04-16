@@ -1,9 +1,11 @@
+import { TimeOfDay } from '@/types'
 import { formatDate } from '@/util/date'
 import fetcher from '@/util/fetcher'
 import { Availability } from '@/util/getAvailability'
+import { poster } from '@/util/poster'
 import { Button, Spinner } from 'flowbite-react'
 import Head from 'next/head'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const today = formatDate(new Date(`${formatDate(new Date())}T00:00:00+0000`))
 
@@ -12,14 +14,30 @@ export default function Home() {
   const [availability, setAvailability] = useState<Availability | null>(null)
   const [availabilityLoading, setAvailabilityLoading] = useState<boolean>(false)
 
+  useEffect(() => {
+    const fetchAvailability = async () => {
+      setAvailabilityLoading(true)
+      const result = await fetcher(`/api/get/availability?date=${selectedDate}`)
+      setAvailability(result)
+      setAvailabilityLoading(false)
+    }
+    if (selectedDate) {
+      fetchAvailability()
+    }
+  }, [selectedDate])
+
   const handleDateChange = async (date: string) => {
     setSelectedDate(date)
+  }
+
+  const handleTimeOfDayClick = async (timeOfDay: TimeOfDay) => {
     setAvailabilityLoading(true)
-    if (selectedDate === null) {
-      return setAvailabilityLoading(false)
-    }
-    const result = await fetcher(`/api/get/availability?date=${selectedDate}`)
-    setAvailability(result)
+    await poster(`/api/post/booking`, {
+      timeOfDay,
+      date: selectedDate,
+      name: 'Placeholder name',
+      email: 'Placeholder email',
+    })
     setAvailabilityLoading(false)
   }
 
@@ -39,8 +57,20 @@ export default function Home() {
           <div className={`flex gap-1 h-10 ${availability ? 'visible' : 'invisible'}`}>
             {availabilityLoading ? <Spinner size='lg' /> : (
               <>
-                <Button pill disabled={!availability?.AM}>AM</Button>
-                <Button pill disabled={!availability?.PM}>PM</Button>
+                <Button
+                  pill
+                  disabled={!availability?.AM}
+                  onClick={() => handleTimeOfDayClick(TimeOfDay.AM)}
+                >
+                  AM
+                </Button>
+                <Button
+                  pill
+                  disabled={!availability?.PM}
+                  onClick={() => handleTimeOfDayClick(TimeOfDay.PM)}
+                >
+                  PM
+                </Button>
               </>
             )}
           </div>

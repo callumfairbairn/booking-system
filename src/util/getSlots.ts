@@ -30,7 +30,7 @@ export const getSlots = ({ date, bookedSlots, employees, slotLength, workingHour
     const employee = getAvailableEmployee({ from: nextFrom, to: nextTo })
 
     if (nextFrom.getHours() < nextTo.getHours() && employee) {
-      slots.push({ from: nextFrom, to: nextTo, employee_id: employee.id })
+      slots.push({ from: nextFrom, to: nextTo, employee: employee })
     }
   }
   return slots
