@@ -5,40 +5,27 @@ import { Availability } from '@/util/getAvailability'
 import { poster } from '@/util/poster'
 import { Button, Spinner } from 'flowbite-react'
 import Head from 'next/head'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+import useSWR from 'swr'
 
 const today = formatDate(new Date(`${formatDate(new Date())}T00:00:00+0000`))
 
 export default function Home() {
   const [selectedDate, setSelectedDate] = useState<string>(today)
-  const [availability, setAvailability] = useState<Availability | null>(null)
-  const [availabilityLoading, setAvailabilityLoading] = useState<boolean>(false)
-
-  useEffect(() => {
-    const fetchAvailability = async () => {
-      setAvailabilityLoading(true)
-      const result = await fetcher(`/api/get/availability?date=${selectedDate}`)
-      setAvailability(result)
-      setAvailabilityLoading(false)
-    }
-    if (selectedDate) {
-      fetchAvailability()
-    }
-  }, [selectedDate])
+  const { data: availability, isLoading, mutate } = useSWR<Availability>(`/api/get/availability?date=${selectedDate}`, fetcher)
 
   const handleDateChange = async (date: string) => {
     setSelectedDate(date)
   }
 
   const handleTimeOfDayClick = async (timeOfDay: TimeOfDay) => {
-    setAvailabilityLoading(true)
     await poster(`/api/post/booking`, {
       timeOfDay,
       date: selectedDate,
       name: 'Placeholder name',
       email: 'Placeholder email',
     })
-    setAvailabilityLoading(false)
+    mutate()
   }
 
   return (
@@ -55,7 +42,7 @@ export default function Home() {
             <input type='date' min={today} value={selectedDate} onChange={(event) => handleDateChange(event.target.value)} />
           </div>
           <div className={`flex gap-1 h-10 ${availability ? 'visible' : 'invisible'}`}>
-            {availabilityLoading ? <Spinner size='lg' /> : (
+            {isLoading ? <Spinner size='lg' /> : (
               <>
                 <Button
                   pill
