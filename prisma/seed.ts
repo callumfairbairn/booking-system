@@ -1,8 +1,5 @@
-// import { bobDole, bumblebeeGuySlot, hankScorpioSlot, jimboJonesSlot, markCook, troyMcClureSlot } from "./seedData"
-
 const seedData = require("./seedData");
 const { PrismaClient } = require('@prisma/client')
-//@ts-ignore
 const prisma = new PrismaClient()
 
 const employees = [

@@ -1,7 +1,7 @@
 import { Availability, getAvailability } from "@/util/getAvailability";
 import { getSlots } from "@/util/getSlots";
 import { NextApiRequest, NextApiResponse } from "next/types";
-import { prisma } from "@/util/prisma";
+import prisma from "@/util/prisma";
 import { slotLength, workingHours } from "@/util/environmentVars";
 
 export default async function handler(
