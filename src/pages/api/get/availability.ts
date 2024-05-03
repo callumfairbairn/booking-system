@@ -9,7 +9,7 @@ export default async function handler(
   res: NextApiResponse<Availability | Error>
 ) {
   if (req.method !== 'GET') {
-    res.status(405).send(Error('Only POST requests allowed'))
+    res.status(405).send(Error('Only GET requests allowed'))
     return
   }
 

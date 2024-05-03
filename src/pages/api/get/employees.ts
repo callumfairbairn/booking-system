@@ -8,6 +8,11 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<employee[] | Error>
 ) {
+  if (req.method !== 'GET') {
+    res.status(405).send(Error('Only GET requests allowed'))
+    return
+  }
+
   const employees = await prisma.employee.findMany()
   if (employees) {
     return res.status(200).json(employees)
