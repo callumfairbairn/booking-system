@@ -1,3 +1,4 @@
+import { ErrorAlert } from '@/components/ErrorAlert'
 import { TimeOfDay } from '@/types'
 import { formatDate } from '@/util/date'
 import fetcher from '@/util/fetcher'
@@ -12,7 +13,7 @@ const today = formatDate(new Date(`${formatDate(new Date())}T00:00:00+0000`))
 
 export default function Home() {
   const [selectedDate, setSelectedDate] = useState<string>(today)
-  const { data: availability, isLoading, mutate } = useSWR<Availability>(`/api/get/availability?date=${selectedDate}`, fetcher)
+  const { data: availability, isLoading, mutate, error } = useSWR<Availability>(`/api/get/availability?date=${selectedDate}`, fetcher)
 
   const handleDateChange = async (date: string) => {
     setSelectedDate(date)
@@ -60,6 +61,9 @@ export default function Home() {
                 </Button>
               </>
             )}
+          </div>
+          <div className={`flex gap-1 h-10 ${error ? 'visible' : 'invisible'}`}>
+            {error ? <ErrorAlert textMajor="Error" textMinor="Something went wrong" /> : null}
           </div>
         </div>
       </main>
