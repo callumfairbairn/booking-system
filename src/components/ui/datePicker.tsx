@@ -17,9 +17,10 @@ import { useEffect } from "react"
 interface DatePickerProps {
   onChange: (date: Date) => void
   initialDate: Date
+  fromDate?: Date
 }
 
-export function DatePicker({ onChange, initialDate }: DatePickerProps) {
+export function DatePicker({ onChange, initialDate, fromDate }: DatePickerProps) {
   const [date, setDate] = React.useState<Date | undefined>(initialDate)
   
 
@@ -48,6 +49,7 @@ export function DatePicker({ onChange, initialDate }: DatePickerProps) {
           mode="single"
           selected={date}
           onSelect={setDate}
+          fromDate={fromDate}
           initialFocus
         />
       </PopoverContent>

@@ -42,7 +42,7 @@ export default function Home() {
       <main className={'bg-slate-300 flex flex-col p-3 min-h-screen min-x-screen justify-center items-center'}>
         <div className='flex flex-col max-w-4xl w-full items-center gap-4'>
           <div className='flex gap-2 content-center justify-center max-w-sm'>
-            <DatePicker onChange={handleDateChange} initialDate={today} />
+            <DatePicker onChange={handleDateChange} initialDate={today} fromDate={today} />
           </div>
           <div className={`flex gap-1 h-10 ${availability ? 'visible' : 'invisible'}`}>
             {isLoading ? <Spinner size='lg' /> : (
