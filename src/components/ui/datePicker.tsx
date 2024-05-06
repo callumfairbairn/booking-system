@@ -1,10 +1,8 @@
 "use client"
 
-import * as React from "react"
 import { CalendarIcon } from "@radix-ui/react-icons"
 import { format } from "date-fns"
 
-import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import {
@@ -12,23 +10,15 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { useEffect } from "react"
+import { cn } from "@/lib/utils"
 
 interface DatePickerProps {
-  onChange: (date: Date) => void
-  initialDate: Date
+  onSelect: (date: Date | undefined) => void
+  date: Date
   fromDate?: Date
 }
 
-export function DatePicker({ onChange, initialDate, fromDate }: DatePickerProps) {
-  const [date, setDate] = React.useState<Date | undefined>(initialDate)
-  
-
-  useEffect(() => {
-    if (date != undefined) {
-      onChange(date)
-    }
-  }, [date])
+export function DatePicker({ onSelect, date, fromDate }: DatePickerProps) {
 
   return (
     <Popover>
@@ -48,7 +38,7 @@ export function DatePicker({ onChange, initialDate, fromDate }: DatePickerProps)
         <Calendar
           mode="single"
           selected={date}
-          onSelect={setDate}
+          onSelect={onSelect}
           fromDate={fromDate}
           initialFocus
         />
